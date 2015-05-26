@@ -15,6 +15,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="proj.android" />
+    <orderEntry type="module" module-name="facebook" exported="" />
+    <orderEntry type="module" module-name="libProtocols" exported="" />
   </component>
 </module>
