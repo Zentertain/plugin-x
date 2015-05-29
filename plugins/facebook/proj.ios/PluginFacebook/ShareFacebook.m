@@ -179,7 +179,7 @@
 }
 
 - (void) setSDKVersion: (NSString *)sdkVersion{
-     [FBSettings setSDKVersion:sdkVersion];
+     //[FBSettings setSDKVersion:sdkVersion];
 }
 
 - (NSString*) getPluginVersion
