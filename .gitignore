@@ -20,6 +20,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.iml
 [Bb]in
 [Dd]ebug*/
 *.sbr
@@ -100,3 +101,5 @@ plugins/touchpay*
 samplesPrivate*
 userconf.ini
 samples/HelloPluginsLua/runtime
+plugins/facebook/proj.android/libFacebook.iml
+protocols/proj.android/libProtocols.iml
