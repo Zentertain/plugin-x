@@ -86,6 +86,12 @@ public:
      */
 	std::string getAccessToken();
 
+    
+    /**
+     @brief can auto login
+     */
+    bool canAutoLogin();
+    
     /**
      @brief get permissoin list
      */

@@ -87,6 +87,10 @@ namespace cocos2d{namespace plugin{
     {
         return agentManager->getUserPlugin()->isLoggedIn();
     }
+    bool FacebookAgent::canAutoLogin()
+    {
+        return agentManager->getUserPlugin()->canAutoLogin();
+    }
     std::string FacebookAgent::getAccessToken()
     {
         return agentManager->getUserPlugin()->callStringFuncWithParam("getAccessToken", NULL);

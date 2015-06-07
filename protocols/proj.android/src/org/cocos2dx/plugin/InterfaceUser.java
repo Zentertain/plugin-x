@@ -32,6 +32,7 @@ public interface InterfaceUser {
 	public void login();
 	public void logout();
 	public boolean isLogined();
+    public boolean canAutoLogin();
 	public String getSessionID();
 	public void setDebugMode(boolean debug);
 	public String getSDKVersion();

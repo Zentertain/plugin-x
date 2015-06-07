@@ -79,6 +79,10 @@ void ProtocolUser::logout(ProtocolUserCallback &cb)
 std::string ProtocolUser::getAccessToken(){
     return PluginUtilsIOS::callOCStringFunctionWithName(this, "getAccessToken");
 }
+bool ProtocolUser::canAutoLogin()
+{
+    return PluginUtilsIOS::callOCBoolFunctionWithName(this, "canAutoLogin");
+}
 bool ProtocolUser::isLoggedIn(){
     return PluginUtilsIOS::callOCBoolFunctionWithName(this, "isLoggedIn");
 }

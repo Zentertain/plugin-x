@@ -43,6 +43,7 @@
 - (void) setSDKVersion:(NSString *)version;
 - (NSString*) getPluginVersion;
 - (NSString *) getAccessToken;
+- (BOOL)canAutoLogin;
 - (NSString *) getPermissionList;
 - (void) api:(NSDictionary *)params;
 - (void) activateApp;

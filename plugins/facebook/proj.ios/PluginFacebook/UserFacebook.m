@@ -89,6 +89,9 @@ NSString *_accessToken = @"";
 -(NSString *)getAccessToken{
     return _accessToken;
 }
+- (BOOL)canAutoLogin{
+    return [[FBSession activeSession] state] == FBSessionStateCreatedTokenLoaded;
+}
 - (NSString*) getSessionID{
     return @"";
 }
