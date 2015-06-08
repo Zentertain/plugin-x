@@ -186,7 +186,7 @@ public class UserFacebook implements InterfaceUser{
     
     public boolean canAutoLogin() {
         Session session = Session.getActiveSession();
-        return session != null && session.getState().equals(SessionState.CREATED_TOKEN_LOADED)
+        return session != null && session.getState().equals(SessionState.OPENED);
     }
 
     @Override
