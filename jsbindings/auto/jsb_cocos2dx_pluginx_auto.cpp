@@ -1340,7 +1340,8 @@ bool js_pluginx_protocols_ProtocolUser_getAccessToken(JSContext *cx, uint32_t ar
 }
 bool js_pluginx_protocols_ProtocolUser_canAutoLogin(JSContext *cx, uint32_t argc, jsval *vp)
 {
-    JSObject *obj = JS_THIS_OBJECT(cx, vp);
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     cocos2d::plugin::ProtocolUser* cobj = (cocos2d::plugin::ProtocolUser *)(proxy ? proxy->ptr : NULL);
     JSB_PRECONDITION2( cobj, cx, false, "js_pluginx_protocols_ProtocolUser_canAutoLogin : Invalid Native Object");
@@ -1348,11 +1349,10 @@ bool js_pluginx_protocols_ProtocolUser_canAutoLogin(JSContext *cx, uint32_t argc
         bool ret = cobj->canAutoLogin();
         jsval jsret = JSVAL_NULL;
         jsret = BOOLEAN_TO_JSVAL(ret);
-        JS_SET_RVAL(cx, vp, jsret);
+        args.rval().set(jsret);
         return true;
     }
-    
-    JS_ReportError(cx, "js_pluginx_protocols_ProtocolUser_isLoggedIn : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_pluginx_protocols_ProtocolUser_canAutoLogin : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
 extern JSObject *jsb_cocos2d_plugin_PluginProtocol_prototype;
@@ -1942,7 +1942,8 @@ bool js_pluginx_protocols_FacebookAgent_canPresentDialogWithParams(JSContext *cx
 }
 bool js_pluginx_protocols_FacebookAgent_canAutoLogin(JSContext *cx, uint32_t argc, jsval *vp)
 {
-    JSObject *obj = JS_THIS_OBJECT(cx, vp);
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     cocos2d::plugin::FacebookAgent* cobj = (cocos2d::plugin::FacebookAgent *)(proxy ? proxy->ptr : NULL);
     JSB_PRECONDITION2( cobj, cx, false, "js_pluginx_protocols_FacebookAgent_canAutoLogin : Invalid Native Object");
@@ -1950,11 +1951,11 @@ bool js_pluginx_protocols_FacebookAgent_canAutoLogin(JSContext *cx, uint32_t arg
         bool ret = cobj->canAutoLogin();
         jsval jsret = JSVAL_NULL;
         jsret = BOOLEAN_TO_JSVAL(ret);
-        JS_SET_RVAL(cx, vp, jsret);
+        args.rval().set(jsret);
         return true;
     }
     
-    JS_ReportError(cx, "js_pluginx_protocols_FacebookAgent_isLoggedIn : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_pluginx_protocols_FacebookAgent_canAutoLogin : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
 bool js_pluginx_protocols_FacebookAgent_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
