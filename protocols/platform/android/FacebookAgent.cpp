@@ -126,6 +126,11 @@ bool FacebookAgent::isLoggedIn()
 	return agentManager->getUserPlugin()->isLoggedIn();
 }
 
+bool FacebookAgent::canAutoLogin()
+{
+    return agentManager->getUserPlugin()->canAutoLogin();
+}
+
 std::string FacebookAgent::getPermissionList()
 {
     return agentManager->getUserPlugin()->callStringFuncWithParam("getPermissionList", NULL);

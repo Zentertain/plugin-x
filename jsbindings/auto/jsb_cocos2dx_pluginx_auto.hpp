@@ -105,6 +105,7 @@ bool js_pluginx_protocols_ProtocolUser_configDeveloperInfo(JSContext *cx, uint32
 bool js_pluginx_protocols_ProtocolUser_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_ProtocolUser_getSessionID(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_ProtocolUser_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_pluginx_protocols_ProtocolUser_canAutoLogin(JSContext *cx, uint32_t argc, jsval *vp);
 
 extern JSClass  *jsb_cocos2d_plugin_AgentManager_class;
 extern JSObject *jsb_cocos2d_plugin_AgentManager_prototype;
@@ -139,6 +140,7 @@ bool js_pluginx_protocols_FacebookAgent_logPurchase(JSContext *cx, uint32_t argc
 bool js_pluginx_protocols_FacebookAgent_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_FacebookAgent_canPresentDialogWithParams(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_FacebookAgent_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_pluginx_protocols_FacebookAgent_canAutoLogin(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_FacebookAgent_destroyInstance(JSContext *cx, uint32_t argc, jsval *vp);
 bool js_pluginx_protocols_FacebookAgent_getInstanceJs(JSContext *cx, uint32_t argc, jsval *vp);
 #endif

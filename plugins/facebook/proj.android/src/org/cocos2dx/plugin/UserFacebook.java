@@ -184,6 +184,11 @@ public class UserFacebook implements InterfaceUser{
         return isLoggedIn;
     }
     
+    public boolean canAutoLogin() {
+        Session session = Session.getActiveSession();
+        return session != null && session.getState().equals(SessionState.OPENED);
+    }
+
     @Override
     public String getSessionID() {
         return null;

@@ -128,6 +128,11 @@ bool ProtocolUser::isLoggedIn()
     return PluginUtils::callJavaBoolFuncWithName(this, "isLogined");
 }
 
+bool ProtocolUser::canAutoLogin()
+{
+    return PluginUtils::callJavaBoolFuncWithName(this, "canAutoLogin");
+}
+
 std::string ProtocolUser::getSessionID()
 {
     return PluginUtils::callJavaStringFuncWithName(this, "getSessionID");

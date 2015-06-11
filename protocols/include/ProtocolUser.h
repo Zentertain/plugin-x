@@ -95,6 +95,12 @@ public:
      */
     std::string getAccessToken();
 
+    /**
+     @brief can auto login
+     */
+    
+    bool canAutoLogin();
+    
     /*
      @deprecated
      @brief set login callback function
