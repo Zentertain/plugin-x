@@ -14,12 +14,28 @@
 #ifdef ANDROID
 #include <android/log.h>
 #endif
-
 #ifndef CCASSERT
 #define CCASSERT(a,b) assert(a)
 #endif
 
 #define PLUGINX_JSB_DEBUG 0
+
+typedef struct js_proxy {
+    void *ptr;
+    JS::Heap<JSObject*> obj;
+    UT_hash_handle hh;
+} js_proxy_t;
+
+extern js_proxy_t *_native_js_global_ht;
+extern js_proxy_t *_js_native_global_ht;
+
+typedef struct js_type_class {
+    JSClass *jsclass;
+    JS::Heap<JSObject*> proto;
+    JS::Heap<JSObject*> parentProto;
+} js_type_class_t;
+
+extern std::unordered_map<std::string, js_type_class_t*> _js_global_type_map;
 
 namespace pluginx {
 
@@ -58,23 +74,6 @@ namespace pluginx {
 } while(0)
 
 
-typedef struct js_proxy {
-	void *ptr;
-    JS::Heap<JSObject*> obj;
-	UT_hash_handle hh;
-} js_proxy_t;
-
-extern js_proxy_t *_native_js_global_ht;
-extern js_proxy_t *_js_native_global_ht;
-
-typedef struct js_type_class {
-	JSClass *jsclass;
-    JS::Heap<JSObject*> proto;
-    JS::Heap<JSObject*> parentProto;
-} js_type_class_t;
-
-extern std::unordered_map<std::string, js_type_class_t*> _js_global_type_map;
-
 unsigned int getHashCodeByString(const char *key);
 
 template< typename DERIVED >
@@ -82,19 +81,19 @@ class TypeTest
 {
 public:
 
-	static int s_id()
-	{
-		// return id unique for DERIVED
-		// NOT SURE IT WILL BE REALLY UNIQUE FOR EACH CLASS!!
-		/* Commented by James Chen
-		Using 'getHashCodeByString(typeid(*native_obj).name())' instead of 'reinterpret_cast<long>(typeid(*native_obj).name());'.
-		Since on win32 platform, 'reinterpret_cast<long>(typeid(*native_obj).name());' invoking in cocos2d.dll and outside cocos2d.dll(in TestJavascript.exe) will return different address.
-		But the return string from typeid(*native_obj).name() is the same string, so we must convert the string to hash id to make sure we can get unique id.
-		*/
-		// static const long id = reinterpret_cast<long>(typeid( DERIVED ).name());
-        static const long id = getHashCodeByString(typeid( DERIVED ).name());
-		return id;
-	}
+//	static int s_id()
+//	{
+//		// return id unique for DERIVED
+//		// NOT SURE IT WILL BE REALLY UNIQUE FOR EACH CLASS!!
+//		/* Commented by James Chen
+//		Using 'getHashCodeByString(typeid(*native_obj).name())' instead of 'reinterpret_cast<long>(typeid(*native_obj).name());'.
+//		Since on win32 platform, 'reinterpret_cast<long>(typeid(*native_obj).name());' invoking in cocos2d.dll and outside cocos2d.dll(in TestJavascript.exe) will return different address.
+//		But the return string from typeid(*native_obj).name() is the same string, so we must convert the string to hash id to make sure we can get unique id.
+//		*/
+//		// static const long id = reinterpret_cast<long>(typeid( DERIVED ).name());
+//        static const long id = getHashCodeByString(typeid( DERIVED ).name());
+//		return id;
+//	}
 
 	static const char* s_name()
 	{

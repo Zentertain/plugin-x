@@ -642,7 +642,7 @@ destroyInstance : function (
 getInstanceJs : function (
 )
 {
-    return cc.plugin::FacebookAgent;
+    return cc.plugin.FacebookAgent;
 },
 
 };

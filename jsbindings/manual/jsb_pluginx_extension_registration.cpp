@@ -3,14 +3,14 @@
 #include "jsb_pluginx_manual_callback.h"
 #include "jsb_pluginx_manual_protocols.h"
 
-static jsval anonEvaluate(JSContext *cx, JS::HandleObject thisObj, const char* string) {
-    JS::RootedValue out(cx);
-//    JSB_AUTOCOMPARTMENT_WITH_GLOBAL_OBJCET
-    if (JS_EvaluateScript(cx, thisObj, string, strlen(string), "(string)", 1, &out) == true) {
-        return out.get();
-    }
-    return JSVAL_VOID;
-}
+//static jsval anonEvaluate(JSContext *cx, JS::HandleObject thisObj, const char* string) {
+//    JS::RootedValue out(cx);
+////    JSB_AUTOCOMPARTMENT_WITH_GLOBAL_OBJCET
+//    if (JS_EvaluateScript(cx, thisObj, string, strlen(string), "(string)", 1, &out) == true) {
+//        return out.get();
+//    }
+//    return JSVAL_VOID;
+//}
 
 extern JSObject *jsb_cocos2d_plugin_ProtocolIAP_prototype;
 extern JSObject *jsb_cocos2d_plugin_ProtocolAds_prototype;
