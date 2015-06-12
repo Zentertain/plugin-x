@@ -10,6 +10,9 @@ dependencies {
 android {
     compileSdkVersion 10
     buildToolsVersion "22.0.1"
+    lintOptions {
+        abortOnError false
+    }
 
     sourceSets {
         main {
