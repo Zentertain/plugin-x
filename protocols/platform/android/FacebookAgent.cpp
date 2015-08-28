@@ -103,6 +103,11 @@ FacebookAgent::~FacebookAgent()
 	AgentManager::destroyInstance();
 }
 
+void FacebookAgent::cleanUp(){
+    requestCallbacks.clear();
+    AgentManager::getInstance()->cleanUp();
+}
+
 void FacebookAgent::login(FBCallback cb)
 {
 	agentManager->getUserPlugin()->login(cb);

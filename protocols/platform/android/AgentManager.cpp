@@ -73,6 +73,11 @@ void AgentManager::destroyInstance()
 	}
 }
 
+void AgentManager::cleanUp(){
+    pUser->setCallback(nullptr);
+    pShare->setCallback(nullptr);
+}
+
 bool AgentManager::initWithConfigureFile()
 {
 	std::map<std::string, std::string> conf = getPluginConfigure();
