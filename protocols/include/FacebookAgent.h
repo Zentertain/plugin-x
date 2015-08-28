@@ -156,6 +156,8 @@ public:
     void setSDKVersion(std::string version);
 	
 	FBCallback getRequestCallback(int index);
+    
+    void cleanUp();
 private:
 	FacebookAgent();
 	

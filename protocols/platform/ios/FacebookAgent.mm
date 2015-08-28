@@ -67,7 +67,10 @@ namespace cocos2d{namespace plugin{
         requestCallbacks.clear();
         AgentManager::destroyInstance();
     }
-    
+    void FacebookAgent::cleanUp(){
+        requestCallbacks.clear();
+        AgentManager::getInstance()->cleanUp();
+    }
     void FacebookAgent::login(FBCallback cb)
     {
         agentManager->getUserPlugin()->login(cb);

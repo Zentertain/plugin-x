@@ -48,6 +48,7 @@ public:
 	virtual bool initWithConfigureFile();
 	virtual bool init(std::map<std::string, std::string>& conf);
 	virtual void purge();
+    virtual void cleanUp();
 
 	inline ProtocolUser* getUserPlugin()
 	{

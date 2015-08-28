@@ -54,6 +54,11 @@ void AgentManager::purge()
 	delete pIAP;
 }
 
+void AgentManager::cleanUp(){
+    pUser->setCallback(nullptr);
+    pShare->setCallback(nullptr);
+}
+    
 AgentManager* AgentManager::getInstance()
 {
 	if(nullptr == s_AgentManager)
