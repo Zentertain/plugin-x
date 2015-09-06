@@ -206,11 +206,10 @@ public class UserFacebook implements InterfaceUser{
 
     @Override
     public String getSDKVersion(){
-        return Settings.getSDKVersion();
+        return "2.0";
     }
 
     public void setSDKVersion(String version){
-        Settings.setSDKVersion(version);
     }
     
     public String getAccessToken(){
