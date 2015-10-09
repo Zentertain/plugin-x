@@ -213,7 +213,7 @@ NSString *_accessToken = @"";
                                      }];
 }
 
--(void)api:(NSMutableDictionary *)params{
+-(void)pureApi:(NSMutableDictionary *)params{
     NSString *graphPath = [params objectForKey:@"Param1"];
     int methodID = [[params objectForKey:@"Param2"] intValue];
     NSString * method = methodID == 0? @"GET":methodID == 1?@"POST":@"DELETE";
@@ -225,19 +225,52 @@ NSString *_accessToken = @"";
                               if(!error){
                                   NSString *msg = [ParseUtils NSDictionaryToNSString:(NSDictionary *)result];
                                   if(nil == msg){
-                                       NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
+                                      NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
                                       [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
                                   }else{
                                       OUTPUT_LOG(@"success");
                                       [UserWrapper onGraphResult:self withRet:kGraphResultSuccess withMsg:msg withCallback:cbId];
                                   }
                               }else{
-                                   NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
+                                  NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
                                   [UserWrapper onGraphResult:self withRet:(int)error.code withMsg:msg withCallback:cbId];
                                   OUTPUT_LOG(@"error %@", error.description);
                               }
-                              
                           }];
+
+}
+
+-(void)api:(NSMutableDictionary *)params{
+    NSDictionary *param = [params objectForKey:@"Param3"];
+    int cbId = [[params objectForKey:@"Param4"] intValue];
+    if (param[@"request_publish"]) {
+        if(FBSession.activeSession.state != FBSessionStateOpen && FBSession.activeSession.state != FBSessionStateOpenTokenExtended){
+            NSString *msg = [ParseUtils MakeJsonStringWithObject:@"Session closed please login first" andKey:@"error_message"];
+            [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+            return;
+        }
+        
+        @try {
+            [[FBSession activeSession] requestNewPublishPermissions:@[@"publish_actions"]
+                                                    defaultAudience:FBSessionDefaultAudienceEveryone
+                                                  completionHandler:^(FBSession *session, NSError *error) {
+                                                      if (error) {
+                                                          NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
+                                                          [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+                                                          return;
+                                                      } else {
+                                                          [self pureApi:params];
+                                                      }
+                                                  }];
+        }
+        @catch (NSException *exception) {
+            NSString *msg = [ParseUtils MakeJsonStringWithObject:[exception reason] andKey:@"error_message"];
+            [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+            return;
+        }
+    } else {
+        [self pureApi:params];
+    }
 }
 -(void)logPurchase:(NSMutableDictionary *)purchaseInfo{
     if(purchaseInfo.count == 2){
