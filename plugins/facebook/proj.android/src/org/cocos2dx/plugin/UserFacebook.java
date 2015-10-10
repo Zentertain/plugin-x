@@ -49,6 +49,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.OpenRequest;
+import com.facebook.SessionDefaultAudience;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
@@ -231,58 +232,95 @@ public class UserFacebook implements InterfaceUser{
 		buffer.append("]}");
     	return buffer.toString();
     }
-    
+
+    private void pureRequest(final JSONObject info){
+        try {
+            String path = info.getString("Param1");
+
+            int method = info.getInt("Param2");
+            HttpMethod httpmethod = HttpMethod.values()[method];
+
+            JSONObject jsonParameters = info.getJSONObject("Param3");
+            Bundle parameter = new Bundle();
+            Iterator<?> it = jsonParameters.keys();
+            while(it.hasNext()){
+                String key = it.next().toString();
+                String value = jsonParameters.getString(key);
+                parameter.putString(key, value);
+            }
+
+            final int nativeCallback = info.getInt("Param4");
+
+            Request request = new Request(Session.getActiveSession(), path, parameter, httpmethod, new Request.Callback() {
+
+                @Override
+                public void onCompleted(final Response response) {
+                    LogD(response.toString());
+
+                    PluginWrapper.runOnGLThread(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            FacebookRequestError error = response.getError();
+                            if(error == null){
+                                nativeRequestCallback(0, response.getGraphObject().getInnerJSONObject().toString(), nativeCallback);
+                            }else{
+                                nativeRequestCallback(error.getErrorCode(), "{\"error_message\":\""+error.getErrorMessage()+"\"}", nativeCallback);
+                            }
+                        }
+                    });
+
+                }
+            });
+            request.executeAsync();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void request(final JSONObject info /*String path, int method, JSONObject params, int nativeCallback*/ ){
         PluginWrapper.runOnMainThread(new Runnable(){
 
             @Override
             public void run() {
                 try {
-                    String path = info.getString("Param1");
-                    
-                    int method = info.getInt("Param2");
-                    HttpMethod httpmethod = HttpMethod.values()[method];
-                    
                     JSONObject jsonParameters = info.getJSONObject("Param3");
-                    Bundle parameter = new Bundle();
-                    Iterator<?> it = jsonParameters.keys();
-                    while(it.hasNext()){
-                        String key = it.next().toString();
-                        String value = jsonParameters.getString(key);
-                        parameter.putString(key, value);
-                    }
-                    
-                    final int nativeCallback = info.getInt("Param4");
-                    
-                    Request request = new Request(Session.getActiveSession(), path, parameter, httpmethod, new Request.Callback() {
-                        
-                        @Override
-                        public void onCompleted(final Response response) {
-                            LogD(response.toString());
+                    if (jsonParameters.has("request_publish")) {
+                        final int nativeCallback = info.getInt("Param4");
 
-                            PluginWrapper.runOnGLThread(new Runnable(){
-
-                                @Override
-                                public void run() {
-                                	FacebookRequestError error = response.getError();
-                                	if(error == null){
-                                    	nativeRequestCallback(0, response.getGraphObject().getInnerJSONObject().toString(), nativeCallback);
-                                    }else{
-                                    	nativeRequestCallback(error.getErrorCode(), "{\"error_message\":\""+error.getErrorMessage()+"\"}", nativeCallback);
-                                    }
-                                }
-                            });
-                            
+                        Session session = Session.getActiveSession();
+                        if (session == null || !session.isOpened()) {
+                            nativeRequestCallback(-1, "{\"error_message\":\"session not open.\"}", nativeCallback);
+                            return;
                         }
-                    });
-                    request.executeAsync();
+
+                        NewPermissionsRequest request = new NewPermissionsRequest(mContext, Arrays.asList("publish_actions"));
+                        request.setCallback(new Session.StatusCallback() {
+                            @Override
+                            public void call(Session session, SessionState state, Exception exception) {
+                                if (exception != null) {
+                                    nativeRequestCallback(-1, "{\"error_message\":\""+exception.getMessage()+"\"}", nativeCallback);
+                                } else {
+                                    pureRequest(info);
+                                }
+                                session.removeCallback(this);
+                            }
+                        });
+                        request.setDefaultAudience(SessionDefaultAudience.EVERYONE);
+
+                        try {
+                            session.requestNewPublishPermissions(request);
+                        } catch (UnsupportedOperationException exception) {
+                            nativeRequestCallback(-1, "{\"error_message\":\"" + exception.getMessage() + "\"}", nativeCallback);
+                        }
+                    } else {
+                        pureRequest(info);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            
         });
-                
     }
     
     public void activateApp(){
