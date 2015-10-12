@@ -38,12 +38,12 @@ public:
         }
     }
     void set(JSString* str, JSContext* cx) {
+        JS::RootedString rstr(cx, str);
+        JS::HandleString hstr(rstr);
+        
         this->cx = cx;
         string = str;
-        // Not suppored in SpiderMonkey v19
-        //buffer = JS_EncodeString(cx, string);
-        
-        buffer = JS_EncodeString(cx, str);
+        buffer = JS_EncodeStringToUTF8(cx, hstr);
     }
 
     std::string get() {
