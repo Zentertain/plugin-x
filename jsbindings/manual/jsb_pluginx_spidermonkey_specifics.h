@@ -26,9 +26,6 @@ typedef struct js_proxy {
     UT_hash_handle hh;
 } js_proxy_t;
 
-extern js_proxy_t *_native_js_global_ht;
-extern js_proxy_t *_js_native_global_ht;
-
 typedef struct js_type_class {
     JSClass *jsclass;
     JS::Heap<JSObject*> proto;
@@ -38,6 +35,8 @@ typedef struct js_type_class {
 extern std::unordered_map<std::string, js_type_class_t*> _js_global_type_map;
 
 namespace pluginx {
+    extern js_proxy_t *_native_js_global_ht;
+    extern js_proxy_t *_js_native_global_ht;
 
 #if PLUGINX_JSB_DEBUG
 #ifdef ANDROID
